@@ -25,7 +25,7 @@ export const WeatherScene3D: React.FC<WeatherScene3DProps> = ({ theme, isDay, in
     );
     camera.position.z = 18;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     renderer.setSize(mount.clientWidth, mount.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -33,10 +33,10 @@ export const WeatherScene3D: React.FC<WeatherScene3DProps> = ({ theme, isDay, in
     mount.appendChild(renderer.domElement);
 
     // 2. Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.6);
     dirLight.position.set(5, 10, 7);
     scene.add(dirLight);
 
@@ -233,22 +233,23 @@ export const WeatherScene3D: React.FC<WeatherScene3DProps> = ({ theme, isDay, in
       buildClouds();
     }
 
-    // Mouse Tracking for subtle 3D parallax tilt
-    let mouseX = 0;
-    let mouseY = 0;
+    // Pointer / Touch Tracking for 3D parallax tilt
     let targetRotationX = 0;
     let targetRotationY = 0;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!interactive) return;
+    const handlePointerMove = (e: MouseEvent | TouchEvent) => {
+      if (!interactive || !mount) return;
       const rect = mount.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-      targetRotationY = x * 0.8;
-      targetRotationX = y * 0.8;
+      const clientX = 'touches' in e ? e.touches[0]?.clientX ?? 0 : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0]?.clientY ?? 0 : e.clientY;
+      const x = (clientX - rect.left) / rect.width - 0.5;
+      const y = (clientY - rect.top) / rect.height - 0.5;
+      targetRotationY = x * 0.75;
+      targetRotationX = y * 0.6;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handlePointerMove);
+    mount.addEventListener('touchmove', handlePointerMove, { passive: true });
 
     // Animation Loop
     let animationFrameId: number;
@@ -260,9 +261,13 @@ export const WeatherScene3D: React.FC<WeatherScene3DProps> = ({ theme, isDay, in
       const delta = clock.getDelta();
       const elapsedTime = clock.getElapsedTime();
 
+      // Gentle continuous autonomous sway so mobile screens are always alive
+      const autoSwayX = Math.sin(elapsedTime * 0.7) * 0.08;
+      const autoSwayY = Math.cos(elapsedTime * 0.5) * 0.12;
+
       // Smooth camera/group rotation interpolation
-      weatherGroup.rotation.y += (targetRotationY - weatherGroup.rotation.y) * 0.05;
-      weatherGroup.rotation.x += (targetRotationX - weatherGroup.rotation.x) * 0.05;
+      weatherGroup.rotation.y += (targetRotationY + autoSwayY - weatherGroup.rotation.y) * 0.05;
+      weatherGroup.rotation.x += (targetRotationX + autoSwayX - weatherGroup.rotation.x) * 0.05;
 
       // Sun animation
       if (sunMesh) {
@@ -305,8 +310,8 @@ export const WeatherScene3D: React.FC<WeatherScene3DProps> = ({ theme, isDay, in
       if (snowParticles) {
         const positions = snowParticles.geometry.attributes.position.array as Float32Array;
         for (let i = 0; i < positions.length; i += 3) {
-          positions[i + 1] -= delta * 3.5; // fall
-          positions[i] += Math.sin(elapsedTime + i) * 0.02; // drift
+          positions[i + 1] -= delta * 3.5;
+          positions[i] += Math.sin(elapsedTime + i) * 0.02;
           if (positions[i + 1] < -10) {
             positions[i + 1] = 10;
           }
@@ -331,11 +336,12 @@ export const WeatherScene3D: React.FC<WeatherScene3DProps> = ({ theme, isDay, in
 
     animate();
 
-    // Auto-Fit Window Resize Listener
+    // Auto-Fit Window & Container Resize Listener
     const handleResize = () => {
       if (!mount) return;
       const width = mount.clientWidth;
       const height = mount.clientHeight;
+      if (width === 0 || height === 0) return;
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
@@ -345,7 +351,10 @@ export const WeatherScene3D: React.FC<WeatherScene3DProps> = ({ theme, isDay, in
 
     // Cleanup
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousemove', handlePointerMove);
+      if (mount) {
+        mount.removeEventListener('touchmove', handlePointerMove);
+      }
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
       if (mount && renderer.domElement) {
@@ -358,8 +367,9 @@ export const WeatherScene3D: React.FC<WeatherScene3DProps> = ({ theme, isDay, in
   return (
     <div 
       ref={mountRef} 
-      className="w-full h-full min-h-[260px] md:min-h-[380px] relative cursor-grab active:cursor-grabbing select-none"
-      title="Interactive 3D Weather Model - Move mouse to inspect"
+      style={{ touchAction: 'pan-y' }}
+      className="w-full h-full min-h-[200px] sm:min-h-[260px] md:min-h-[340px] relative cursor-grab active:cursor-grabbing select-none"
+      title="Interactive 3D Weather Model - Touch / Move to inspect"
     />
   );
 };

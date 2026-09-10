@@ -28,19 +28,19 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
     <motion.div
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      whileHover={{ y: -4 }}
+      whileHover={{ y: -3 }}
       transition={{ type: 'spring', stiffness: 350, damping: 25 }}
       onClick={onClick}
-      className={`group relative rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl p-5 md:p-6 overflow-hidden shadow-lg shadow-black/40 ${className}`}
+      className={`group relative rounded-2xl sm:rounded-3xl border border-white/10 bg-slate-900/60 backdrop-blur-xl p-4 sm:p-5 md:p-6 overflow-hidden shadow-lg shadow-black/40 ${className}`}
     >
       {/* Dynamic Cursor Spotlight Radial Glow */}
       <motion.div
-        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition duration-300 group-hover:opacity-100"
+        className="pointer-events-none absolute -inset-px rounded-2xl sm:rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
         style={{
           background: useMotionTemplate`radial-gradient(350px circle at ${mouseX}px ${mouseY}px, ${glowColor}, transparent 80%)`,
         }}
       />
-      <div className="relative z-10">{children}</div>
+      <div className="relative z-10 w-full">{children}</div>
     </motion.div>
   );
 };
