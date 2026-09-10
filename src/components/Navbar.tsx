@@ -74,59 +74,59 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-2xl bg-slate-950/80 border-b border-white/10 transition-colors">
+    <header className="sticky top-0 z-40 w-full backdrop-blur-2xl bg-slate-900/90 border-b border-white/20 shadow-lg transition-colors">
       <div className="fluid-container py-2.5 sm:py-3 md:py-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-2.5 sm:gap-3 md:gap-6">
           
           {/* Brand Logo & Mobile Action Controls */}
           <div className="flex items-center justify-between w-full md:w-auto">
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2.5 sm:gap-3">
               <motion.div 
                 whileHover={{ rotate: 180, scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 flex items-center justify-center shadow-lg shadow-orange-500/30 cursor-pointer flex-shrink-0"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 flex items-center justify-center shadow-lg shadow-orange-500/40 cursor-pointer flex-shrink-0"
               >
                 <Compass className="w-4 h-4 sm:w-5 sm:h-5 text-white animate-spin-slow" />
               </motion.div>
               <div>
-                <span className="font-display font-black text-lg sm:text-xl md:text-2xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+                <span className="font-display font-black text-lg sm:text-xl md:text-2xl tracking-tight text-white">
                   AuraWeather <span className="text-amber-400">3D</span>
                 </span>
-                <span className="hidden lg:inline-block ml-2 text-[9px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                <span className="hidden lg:inline-block ml-2 text-[10px] uppercase tracking-widest font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">
                   Real-time Free API
                 </span>
               </div>
             </div>
 
-            {/* Mobile Controls (Always accessible, min 40px touch targets) */}
-            <div className="flex md:hidden items-center gap-1.5 sm:gap-2">
+            {/* Mobile Controls */}
+            <div className="flex md:hidden items-center gap-2">
               <button
                 onClick={onToggleMagic}
-                className={`min-h-[38px] px-2.5 rounded-xl text-xs flex items-center gap-1 border transition-all ${
+                className={`min-h-[38px] px-2.5 rounded-xl text-xs flex items-center gap-1.5 border transition-all ${
                   magicEnabled
-                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm shadow-amber-500/30'
-                    : 'bg-white/5 text-slate-400 border-white/10'
+                    ? 'bg-amber-500/25 text-amber-200 border-amber-400/50 shadow-md shadow-amber-500/30'
+                    : 'bg-slate-800 text-slate-300 border-white/20'
                 }`}
                 title="Toggle Magic Click Effect"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span className="text-[11px] font-semibold">{magicEnabled ? 'Magic ON' : 'OFF'}</span>
+                <span className="text-xs font-bold">{magicEnabled ? 'Magic ON' : 'OFF'}</span>
               </button>
 
               <button
                 onClick={onToggleUnit}
-                className="min-h-[38px] px-3 rounded-xl text-xs font-bold bg-white/10 text-white border border-white/15 active:scale-95 transition-transform"
+                className="min-h-[38px] px-3 rounded-xl text-xs font-black bg-slate-800 text-white border border-white/25 active:scale-95 transition-transform"
               >
                 {unit}
               </button>
             </div>
           </div>
 
-          {/* Search Bar with Autocomplete & Geolocation */}
+          {/* Search Bar with High Contrast Autocomplete & Geolocation */}
           <div ref={searchContainerRef} className="relative w-full md:max-w-md flex-1">
             <div className="relative flex items-center">
-              <Search className="absolute left-3.5 w-4 h-4 text-slate-400 pointer-events-none" />
+              <Search className="absolute left-3.5 w-4 h-4 text-amber-400 pointer-events-none" />
               <input
                 type="text"
                 value={query}
@@ -136,8 +136,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
                 onFocus={() => setIsOpen(true)}
                 placeholder="Search city (e.g. Mumbai, Tokyo, London)..."
-                /* text-base on mobile prevents iOS safari 16px auto-zoom */
-                className="w-full pl-10 pr-24 py-2.5 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-400 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400/80 transition-all shadow-inner"
+                className="w-full pl-10 pr-24 py-2.5 rounded-xl sm:rounded-2xl bg-slate-800/95 border-2 border-white/20 text-white placeholder:text-slate-300 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all shadow-md font-medium"
               />
               
               <div className="absolute right-1.5 flex items-center gap-1">
@@ -150,16 +149,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <MagneticButton
                   onClick={onLocateMe}
                   disabled={isLocating}
-                  variant="secondary"
-                  className="!px-2.5 !py-1.5 !rounded-lg sm:!rounded-xl !text-xs gap-1.5 min-h-[34px]"
+                  variant="primary"
+                  className="!px-3 !py-1.5 !rounded-lg sm:!rounded-xl !text-xs gap-1.5 min-h-[34px] !font-bold"
                   title="Detect My Location via GPS"
                 >
                   {isLocating ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-400" />
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
                   ) : (
-                    <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                    <MapPin className="w-3.5 h-3.5 text-white" />
                   )}
-                  <span className="text-[11px] font-semibold">GPS</span>
+                  <span className="text-xs font-black">GPS</span>
                 </MagneticButton>
               </div>
             </div>
@@ -172,33 +171,33 @@ export const Navbar: React.FC<NavbarProps> = ({
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -8, scale: 0.98 }}
                   transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-                  className="absolute left-0 right-0 top-full mt-2 bg-slate-900/98 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl overflow-hidden z-50 divide-y divide-white/5 max-h-[320px] overflow-y-auto"
+                  className="absolute left-0 right-0 top-full mt-2 bg-slate-900 border-2 border-white/20 rounded-2xl shadow-2xl overflow-hidden z-50 divide-y divide-white/10 max-h-[320px] overflow-y-auto"
                 >
                   {suggestions.length > 0 ? (
                     suggestions.map((item) => (
                       <button
                         key={`${item.id}-${item.latitude}`}
                         onClick={() => handleSelect(item)}
-                        className="w-full px-4 py-3 text-left hover:bg-white/10 flex items-center justify-between transition-colors group min-h-[44px]"
+                        className="w-full px-4 py-3 text-left hover:bg-slate-800 flex items-center justify-between transition-colors group min-h-[44px]"
                       >
                         <div className="flex items-center gap-3">
-                          <MapPin className="w-4 h-4 text-amber-400/80 group-hover:text-amber-400 transition-colors flex-shrink-0" />
+                          <MapPin className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform flex-shrink-0" />
                           <div className="truncate">
-                            <span className="font-semibold text-slate-100 group-hover:text-white text-sm">
+                            <span className="font-bold text-white text-sm">
                               {item.name}
                             </span>
-                            <span className="text-xs text-slate-400 ml-2 truncate">
+                            <span className="text-xs text-slate-300 ml-2 truncate">
                               {item.admin1 ? `${item.admin1}, ` : ''}{item.country}
                             </span>
                           </div>
                         </div>
-                        <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-white/5 text-slate-400 flex-shrink-0">
+                        <span className="text-[10px] uppercase font-mono font-bold px-2 py-0.5 rounded bg-white/10 text-slate-200 flex-shrink-0">
                           {item.country_code}
                         </span>
                       </button>
                     ))
                   ) : (
-                    <div className="px-4 py-3 text-xs text-slate-400 text-center">
+                    <div className="px-4 py-3 text-xs text-slate-300 text-center font-medium">
                       No cities found for "{query}".
                     </div>
                   )}
@@ -214,10 +213,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               onClick={onToggleMagic}
-              className={`px-3.5 py-2 rounded-2xl text-xs font-semibold flex items-center gap-2 border transition-all ${
+              className={`px-3.5 py-2 rounded-2xl text-xs font-bold flex items-center gap-2 border transition-all ${
                 magicEnabled
-                  ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border-amber-500/40 shadow-lg shadow-amber-500/20'
-                  : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10'
+                  ? 'bg-amber-500/25 text-amber-200 border-amber-400/50 shadow-lg shadow-amber-500/30'
+                  : 'bg-slate-800 text-slate-300 border-white/20 hover:bg-slate-700'
               }`}
               title="Toggle Magic Particle FX on every click"
             >
@@ -226,19 +225,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             </motion.button>
 
             {/* Metric / Imperial Unit Toggle */}
-            <div className="flex items-center p-1 bg-white/5 rounded-2xl border border-white/10">
+            <div className="flex items-center p-1 bg-slate-800 rounded-2xl border border-white/20">
               <button
                 onClick={() => unit !== '°C' && onToggleUnit()}
-                className={`px-3 py-1 text-xs font-bold rounded-xl transition-all ${
-                  unit === '°C' ? 'bg-amber-500 text-black shadow-md' : 'text-slate-400 hover:text-white'
+                className={`px-3 py-1 text-xs font-black rounded-xl transition-all ${
+                  unit === '°C' ? 'bg-amber-500 text-black shadow-md' : 'text-slate-300 hover:text-white'
                 }`}
               >
                 °C
               </button>
               <button
                 onClick={() => unit !== '°F' && onToggleUnit()}
-                className={`px-3 py-1 text-xs font-bold rounded-xl transition-all ${
-                  unit === '°F' ? 'bg-amber-500 text-black shadow-md' : 'text-slate-400 hover:text-white'
+                className={`px-3 py-1 text-xs font-black rounded-xl transition-all ${
+                  unit === '°F' ? 'bg-amber-500 text-black shadow-md' : 'text-slate-300 hover:text-white'
                 }`}
               >
                 °F
@@ -249,10 +248,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Quick-Pick Popular Cities Horizontal Snap Rail */}
-        <div className="relative flex items-center mt-2">
+        <div className="relative flex items-center mt-2.5">
           <div className="flex items-center gap-1.5 overflow-x-auto py-1 no-scrollbar text-xs w-full snap-x-mandatory">
-            <span className="text-[11px] text-slate-400 font-medium whitespace-nowrap mr-1 flex items-center gap-1 flex-shrink-0">
-              <Star className="w-3 h-3 text-amber-400 fill-amber-400/30" /> Popular:
+            <span className="text-xs text-amber-300 font-bold whitespace-nowrap mr-1 flex items-center gap-1 flex-shrink-0">
+              <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" /> Popular:
             </span>
             {POPULAR_CITIES.map((city) => {
               const isSelected = currentCityName.toLowerCase() === city.name.toLowerCase();
@@ -262,10 +261,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => onSelectCity(city)}
-                  className={`px-3 py-1.5 rounded-xl whitespace-nowrap text-xs font-medium transition-all flex-shrink-0 snap-start min-h-[32px] ${
+                  className={`px-3.5 py-1.5 rounded-xl whitespace-nowrap text-xs font-bold transition-all flex-shrink-0 snap-start min-h-[32px] border ${
                     isSelected
-                      ? 'bg-amber-500 text-slate-950 font-bold shadow-sm shadow-amber-500/50'
-                      : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
+                      ? 'bg-amber-500 text-black border-amber-400 font-extrabold shadow-md shadow-amber-500/50'
+                      : 'bg-slate-800/90 hover:bg-slate-700 text-slate-200 border-white/20'
                   }`}
                 >
                   {city.name}

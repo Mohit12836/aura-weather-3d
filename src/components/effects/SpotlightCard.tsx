@@ -11,7 +11,7 @@ interface SpotlightCardProps {
 export const SpotlightCard: React.FC<SpotlightCardProps> = ({
   children,
   className = '',
-  glowColor = 'rgba(245, 158, 11, 0.15)',
+  glowColor = 'rgba(255, 255, 255, 0.15)',
   onClick,
 }) => {
   const mouseX = useMotionValue(0);
@@ -31,7 +31,7 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
       whileHover={{ y: -3 }}
       transition={{ type: 'spring', stiffness: 350, damping: 25 }}
       onClick={onClick}
-      className={`group relative rounded-2xl sm:rounded-3xl border border-white/10 bg-slate-900/60 backdrop-blur-xl p-4 sm:p-5 md:p-6 overflow-hidden shadow-lg shadow-black/40 ${className}`}
+      className={`group relative rounded-2xl sm:rounded-3xl border border-white/20 bg-slate-900/85 backdrop-blur-2xl p-4 sm:p-5 md:p-6 overflow-hidden shadow-xl shadow-black/35 hover:border-white/35 transition-all ${className}`}
     >
       {/* Dynamic Cursor Spotlight Radial Glow */}
       <motion.div
